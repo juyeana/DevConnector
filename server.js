@@ -3,10 +3,19 @@ const mongoose = require('mongoose');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
+const bodyparser = require('body-parser');
 
 //create an instance of the express
 //this statement brings everything from express library
 const app = express();
+
+//Body parser configuration
+//Whenever you get data, convert the data into JSON format using bodyparser
+//use body-parser and make sure url is encoded in a normal way
+//define body-parser here only once to use it anywhere in the app. If you don't define it here, you will need to define it every time you need. 
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(bodyparser.json());
+
 
 //First route
 //when a user visit a link, what do you want to execute?

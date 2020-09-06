@@ -1,15 +1,12 @@
 const express = require('express');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
+const keys = require('../../config/keys');
 
 // I want only Router from the express nothing else.
 const router = express.Router();
-
-// @route GET /api/users/test
-// @desc Tests user js
-// @access Public
-router.get('/test', (req, res) => res.json({ msg: 'User works' }));
 
 // @route POST /api/users/register
 // @desc Register user
@@ -52,5 +49,43 @@ router.post('/register', (req, res) => {
       });
     }
   });
+});
+
+// @route POST /api/users/login
+// @desc Login user
+// @access Public
+
+router.post('/login', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) return res.status(404).json({ email: 'user not found' });
+
+      //check the password
+
+      bcrypt
+        .compare(password, user.password)
+        .then((isMatch) => {
+          if (isMatch) {
+            //User matched and create a token
+            const payload = {
+              id: user.id,
+              name: user.name,
+              avatar: user.avatar,
+            };
+            //sign token
+            //majority companies in industry use 'Bearer' type of token, with which users are reponsible for any actions they make. But you need to add 'Bearer' before an issued token
+            jwt.sign(payload, keys.secretKey, {expiresIn:3600}, (err, token)=>{
+              return res.json({token:`Bearer ` + token})
+            });
+          } else {
+            return res.status(400).json({ password: 'Invalid password' });
+          }
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 });
 module.exports = router;

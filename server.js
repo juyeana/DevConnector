@@ -12,16 +12,15 @@ const app = express();
 //Body parser configuration
 //Whenever you get data, convert the data into JSON format using bodyparser
 //use body-parser and make sure url is encoded in a normal way
-//define body-parser here only once to use it anywhere in the app. If you don't define it here, you will need to define it every time you need. 
-app.use(bodyparser.urlencoded({extended: false}));
+//define body-parser here only once to use it anywhere in the app. If you don't define it here, you will need to define it every time you need.
+app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
-
 
 //First route
 //when a user visit a link, what do you want to execute?
 app.get('/', (req, res) => res.send('Hello'));
 
-//if you see this specific uri, take me to the javascript
+//if you see this specific uri, take me to the corresponding javascript
 //only javascripts that defined here will be exectuted
 app.use('/api/users', users);
 app.use('/api/profile', profile);
@@ -40,3 +39,5 @@ mongoose
   .connect(db)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
+
+app.use(passport.initialize());

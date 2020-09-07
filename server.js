@@ -4,6 +4,7 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const bodyparser = require('body-parser');
+const passport = require('passport');
 
 //create an instance of the express
 //this statement brings everything from express library
@@ -36,8 +37,15 @@ const db = require('./config/keys').mongoURI;
 
 //connect mongodb
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
+//passport configuration
+
+//initialize passport and ask app to use it
 app.use(passport.initialize());
+
+//calling the passport function from passport.js and execute it here
+//at this point, there is no token to execute but initialize it and gets ready to receive a token when it's available.
+require('./config/passport')(passport);

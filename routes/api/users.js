@@ -2,8 +2,10 @@ const express = require('express');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport'); //just import passport library itself as passport.js configures what it needs to do.
 const gravatar = require('gravatar');
 const keys = require('../../config/keys');
+const validateRegisterInput=require('../../validation/register')
 
 // I want only Router from the express nothing else.
 const router = express.Router();
@@ -13,6 +15,13 @@ const router = express.Router();
 // @access Public
 
 router.post('/register', (req, res) => {
+
+  const {errors, isValid} = validateRegisterInput(req.body);
+
+
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
   //email : the name of the schema
   //req.body.email : the value that user submits
   //request to find a user's email address if that matches with one the user enters => checking if the same email address exist in the database
@@ -77,9 +86,14 @@ router.post('/login', (req, res) => {
             };
             //sign token
             //majority companies in industry use 'Bearer' type of token, with which users are reponsible for any actions they make. But you need to add 'Bearer' before an issued token
-            jwt.sign(payload, keys.secretKey, {expiresIn:3600}, (err, token)=>{
-              return res.json({token:`Bearer ` + token})
-            });
+            jwt.sign(
+              payload,
+              keys.secretKey,
+              { expiresIn: 3600 },
+              (err, token) => {
+                return res.json({ token: `Bearer ` + token });
+              }
+            );
           } else {
             return res.status(400).json({ password: 'Invalid password' });
           }
@@ -88,4 +102,17 @@ router.post('/login', (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+//'current' route is for testing passport in the server side before we build UI.
+// @route GET /api/users/current
+// @desc Return the current user
+// @access Private
+
+router.get(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    return res.json(req.user);
+  }
+);
 module.exports = router;

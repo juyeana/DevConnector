@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport'); //just import passport library itself as passport.js configures what it needs to do.
 const gravatar = require('gravatar');
 const keys = require('../../config/keys');
-const validateRegisterInput=require('../../validation/register')
+const validateRegisterInput = require('../../validation/register');
 
 // I want only Router from the express nothing else.
 const router = express.Router();
@@ -15,11 +15,9 @@ const router = express.Router();
 // @access Public
 
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
 
-  const {errors, isValid} = validateRegisterInput(req.body);
-
-
-  if(!isValid){
+  if (!isValid) {
     return res.status(400).json(errors);
   }
   //email : the name of the schema
@@ -40,6 +38,7 @@ router.post('/register', (req, res) => {
         email: req.body.email,
         avatar,
         password: req.body.password,
+        comment: req.body.comment,
       });
       //genSalt: generate salt
       //you can either use promise then or a callback function

@@ -1,27 +1,27 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//Create schema 
+//Create schema
 
 const UserSchema = new Schema({
   name: {
-    type:String, 
+    type: String,
     required: true,
   },
-  email:{
-    type:String,
+  email: {
+    type: String,
     required: true,
   },
-  password:{
-    type:String,
+  password: {
+    type: String,
     required: true,
   },
   avatar: {
-    type:String,
+    type: String,
   },
-  data: {
-    type:Date,
-    default:Date.now,
+
+  comment: {
+    type: String,
   },
 });
 
@@ -29,4 +29,4 @@ const UserSchema = new Schema({
 //User = users
 //User : internal name
 //users : name that the database use outside
-module.exports = User = mongoose.model('users', UserSchema)
+module.exports = User = mongoose.model('users', UserSchema);

@@ -19,7 +19,7 @@ app.use(bodyparser.json());
 
 //First route
 //when a user visit a link, what do you want to execute?
-app.get('/', (req, res) => res.send('Hello'));
+app.get('/', (req, res) => res.send('Hi there'));
 
 //if you see this specific uri, take me to the corresponding javascript
 //only javascripts that defined here will be exectuted
@@ -27,7 +27,7 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
 
-const port = 7000;
+const port = 7100;
 //app.func(a, functionB)  - if a gets exectuted successfully then execute functionB
 app.listen(port, () => console.log(`Server running on port ${port}...`));
 

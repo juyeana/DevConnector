@@ -34,6 +34,7 @@ module.exports = function validateRegisterInput(data) {
     errors.password2 = 'Passwords must match.';
   }
 
+
   //NOTE: Validator.isEmpty(data) only checks 'undefined' of string value not objects so you need to come up with your own isEmpty method.
   return {
     errors,

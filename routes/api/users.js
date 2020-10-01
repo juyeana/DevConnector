@@ -6,6 +6,7 @@ const passport = require('passport'); //just import passport library itself as p
 const gravatar = require('gravatar');
 const keys = require('../../config/keys');
 const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
 // I want only Router from the express nothing else.
 const router = express.Router();
@@ -64,6 +65,11 @@ router.post('/register', (req, res) => {
 // @access Public
 
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   const email = req.body.email;
   const password = req.body.password;
 

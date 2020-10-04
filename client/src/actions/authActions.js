@@ -1,10 +1,18 @@
 //trigger dispatch call by user's action on the UI
 
-import { SET_USER } from './types';
+import { SET_ERRORS, SET_USER } from './types';
 
-export const registerUser = (userData) => {
-  return {
-    type: SET_USER,
-    payload: userData,
-  };
+import axios from 'axios';
+
+export const registerUser = (userData, history) => (dispatch) => {
+  axios
+    .post('/api/users/register', userData)
+    .then((res) => history.push('/login')
+    )
+    .catch((err) =>
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data,
+      })
+    );
 };

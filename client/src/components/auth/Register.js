@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
+import PropTypes from 'prop-types';
 
 class Register extends Component {
   constructor() {
@@ -12,7 +14,7 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      errors: {},
+      errors:{}
     };
 
     //alias to simplify the code
@@ -33,17 +35,28 @@ class Register extends Component {
       email: this.state.email,
       password: this.state.password,
       password2: this.state.password2,
+      
     };
 
-    axios
-      .post('/api/users/register', newUser)
-      .then((res) => console.log(res.data))
-      .catch((err) => this.setState({ errors: err.response.data }));
+    this.props.registerUser(newUser, this.props.history);
+  }
+
+  //example of lifecycle method which will let components know the updated state whenever it's changed.
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    if(nextProps.errors){
+      this.setState({errors: nextProps.errors});
+    }
   }
   render() {
     //deconstructing errors from this.state
     //following is the same as const errors = this.state.errors;
-    const { errors } = this.state;
+    //With componentWillReceiveProps method, you can now read errors from the local state.
+    // const { errors } = this.state;
+
+    //read errors from the store
+    const { errors } = this.props;
     return (
       <div className='register'>
         <div className='container'>
@@ -140,4 +153,16 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+
+//it's not required but good code practice is to ensure required data types and all dependencies are loaded before a component is even  loaded. Otherwise, do not load a component.
+Register.propTypes = {
+  registerUser:PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+}
+
+//connect ('incoming data from the store', action to trigger)
+
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+});
+export default connect(mapStateToProps, { registerUser })(Register);

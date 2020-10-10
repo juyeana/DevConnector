@@ -14,7 +14,7 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      errors:{}
+      errors: {},
     };
 
     //alias to simplify the code
@@ -35,20 +35,32 @@ class Register extends Component {
       email: this.state.email,
       password: this.state.password,
       password2: this.state.password2,
-      
     };
 
+    //NOTE:
+    //This is how you trigger an action
+    //when you connect a action 'registerUser' at the bottom of the component, registerUser gets added to this component's property
+    // so you can trigger as this.props.registerUser and pass newUser values
     this.props.registerUser(newUser, this.props.history);
   }
 
-  //example of lifecycle method which will let components know the updated state whenever it's changed.
+  //example of a lifecycle method which will let all components know whenever any state changes.
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
-    if(nextProps.errors){
-      this.setState({errors: nextProps.errors});
+  // componentWillReceiveProps(nextProps) {
+  //   console.log(nextProps)
+  //   if(nextProps.errors){
+  //     this.setState({errors: nextProps.errors});
+  //   }
+  // }
+
+  //refactoring from componentWillReceiveProps(nextProps)
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.errors !== state.errors) {
+      return { errors: props.errors };
     }
   }
+
   render() {
     //deconstructing errors from this.state
     //following is the same as const errors = this.state.errors;
@@ -56,7 +68,7 @@ class Register extends Component {
     // const { errors } = this.state;
 
     //read errors from the store
-    const { errors } = this.props;
+    const { errors } = this.state;
     return (
       <div className='register'>
         <div className='container'>
@@ -154,15 +166,16 @@ class Register extends Component {
   }
 }
 
-//it's not required but good code practice is to ensure required data types and all dependencies are loaded before a component is even  loaded. Otherwise, do not load a component.
+//it's not required but good coding practice is to ensure required data types and all dependencies are loaded before a component is even  loaded. Otherwise, do not load a component.
+//isRequired means the data is there even though it's empty
 Register.propTypes = {
-  registerUser:PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-}
+};
 
-//connect ('incoming data from the store', action to trigger)
-
+//read data back from the store
 const mapStateToProps = (state) => ({
   errors: state.errors,
 });
+//connect ('incoming data from the store', action to trigger)
 export default connect(mapStateToProps, { registerUser })(Register);

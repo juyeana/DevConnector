@@ -1,6 +1,6 @@
 //trigger dispatch call by user's action on the UI
 
-import { SET_ERRORS, SET_USER } from './types';
+import { SET_ERRORS } from './types';
 
 import axios from 'axios';
 

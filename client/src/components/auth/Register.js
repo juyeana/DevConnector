@@ -61,6 +61,8 @@ class Register extends Component {
     }
   }
 
+ 
+
   render() {
     //deconstructing errors from this.state
     //following is the same as const errors = this.state.errors;

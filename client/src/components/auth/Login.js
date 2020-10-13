@@ -36,6 +36,11 @@ class Login extends Component {
     this.props.loginUser(user);
   }
 
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('./dashboard');
+    }
+  }
   // componentWillReceiveProps(nextProps) {
 
   //   if(nextProps.history){
@@ -48,8 +53,7 @@ class Login extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.auth.isAuthenticated) {
-
-      props.history.push('/dashboard')
+      props.history.push('/dashboard');
     }
     if (props.errors !== state.errors) {
       return { errors: props.errors };

@@ -14,7 +14,9 @@ const store = createStore(
   rootReducer,
   {},
   compose(
+    //thunking enhancement
     applyMiddleware(...middleware),
+    //allows redux devtools extension
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );

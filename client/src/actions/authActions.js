@@ -5,12 +5,17 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utils/setAuthToken';
 
+//*** same as the arrow function */
+// export default function(userdata){
+
+// }
 export const registerUser = (userData, history) => (dispatch) => {
   axios
     .post('/api/users/register', userData)
     .then((res) => history.push('/login'))
     .catch((err) =>
       dispatch({
+        //call action to dispatch
         type: SET_ERRORS,
         payload: err.response.data,
       })
